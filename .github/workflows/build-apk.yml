@@ -4,12 +4,10 @@ on:
   push:
     branches:
       - claude/zomato-food-delivery-app-9lzexx
-    paths-ignore:
-      - "dist/**"
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build:
@@ -39,27 +37,26 @@ jobs:
       - name: Expo prebuild (android)
         run: npx expo prebuild --platform android --no-install
 
-      - name: Build debug APK
+      # Release build: embeds the JS bundle (a debug APK expects a Metro dev
+      # server, which won't exist on the installing phone) and is still
+      # signed with the auto-generated debug keystore, so no signing setup
+      # is needed. Restricted to arm64-v8a (virtually all modern Android
+      # phones) instead of all 4 ABIs to keep the file small enough to hand
+      # back directly.
+      - name: Build release APK
         working-directory: android
-        run: ./gradlew assembleDebug --no-daemon
+        run: ./gradlew assembleRelease --no-daemon
         env:
-          ORG_GRADLE_PROJECT_reactNativeArchitectures: armeabi-v7a,arm64-v8a,x86,x86_64
+          ORG_GRADLE_PROJECT_reactNativeArchitectures: arm64-v8a
 
       - name: Copy APK to dist
         run: |
           mkdir -p dist
-          cp android/app/build/outputs/apk/debug/app-debug.apk dist/foodie-debug.apk
+          cp android/app/build/outputs/apk/release/app-release.apk dist/foodie-release.apk
+          ls -la dist/
 
       - name: Upload APK as workflow artifact
         uses: actions/upload-artifact@v4
         with:
-          name: foodie-debug-apk
-          path: dist/foodie-debug.apk
-
-      - name: Commit APK back to branch
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f dist/foodie-debug.apk
-          git diff --cached --quiet && echo "No changes to commit" || git commit -m "Add built debug APK [skip ci]"
-          git push
+          name: foodie-release-apk
+          path: dist/foodie-release.apk
