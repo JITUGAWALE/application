@@ -7,15 +7,18 @@ import { colors } from '../theme';
 type Props = NativeStackScreenProps<RootStackParamList, 'OrderConfirmation'>;
 
 export default function OrderConfirmationScreen({ route, navigation }: Props) {
-  const { orderId } = route.params;
+  const { orderId, paymentId } = route.params;
 
   return (
     <View style={styles.container}>
       <Text style={styles.emoji}>✅</Text>
       <Text style={styles.title}>Order Placed!</Text>
       <Text style={styles.orderId}>Order #{orderId}</Text>
+      {paymentId && <Text style={styles.orderId}>Payment ID: {paymentId}</Text>}
       <Text style={styles.message}>
-        Your order has been placed successfully. Pay with cash when it arrives at your doorstep.
+        {paymentId
+          ? 'Payment received. Your order has been placed successfully.'
+          : 'Your order has been placed successfully. Pay with cash when it arrives at your doorstep.'}
       </Text>
 
       <Pressable

@@ -7,6 +7,7 @@ import { RootStackParamList } from '../navigation/types';
 import { colors } from '../theme';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Checkout'>;
+type PaymentMethod = 'CASH_ON_DELIVERY' | 'RAZORPAY';
 
 export default function CheckoutScreen({ navigation }: Props) {
   const { user } = useAuth();
@@ -14,15 +15,31 @@ export default function CheckoutScreen({ navigation }: Props) {
   const { deliveryFee, tax, total } = computeOrderTotals(subtotal);
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('CASH_ON_DELIVERY');
 
   const onPlaceOrder = () => {
     if (!address.trim() || !phone.trim()) {
       Alert.alert('Missing details', 'Please add a delivery address and phone number.');
       return;
     }
+    if (!user) return;
+
     const orderId = `ORD${Date.now().toString().slice(-8)}`;
-    clearCart();
-    navigation.replace('OrderConfirmation', { orderId });
+
+    if (paymentMethod === 'CASH_ON_DELIVERY') {
+      clearCart();
+      navigation.replace('OrderConfirmation', { orderId });
+      return;
+    }
+
+    navigation.navigate('RazorpayPayment', {
+      amount: total,
+      orderId,
+      restaurantName: restaurant?.name ?? 'Foodie',
+      customerName: user.name,
+      customerEmail: user.email,
+      customerPhone: phone,
+    });
   };
 
   return (
@@ -50,15 +67,34 @@ export default function CheckoutScreen({ navigation }: Props) {
         {user && <Text style={styles.hint}>Ordering as {user.name} ({user.email})</Text>}
 
         <Text style={styles.sectionTitle}>Payment Method</Text>
-        <View style={styles.paymentOption}>
-          <View style={styles.radioOuter}>
-            <View style={styles.radioInner} />
+
+        <Pressable
+          style={[styles.paymentOption, paymentMethod !== 'CASH_ON_DELIVERY' && styles.paymentOptionInactive]}
+          onPress={() => setPaymentMethod('CASH_ON_DELIVERY')}
+          testID="payment-method-cod"
+        >
+          <View style={[styles.radioOuter, paymentMethod !== 'CASH_ON_DELIVERY' && styles.radioOuterInactive]}>
+            {paymentMethod === 'CASH_ON_DELIVERY' && <View style={styles.radioInner} />}
           </View>
           <View style={{ flex: 1 }}>
             <Text style={styles.paymentTitle}>Cash on Delivery</Text>
             <Text style={styles.paymentSubtitle}>Pay with cash when your order arrives</Text>
           </View>
-        </View>
+        </Pressable>
+
+        <Pressable
+          style={[styles.paymentOption, paymentMethod !== 'RAZORPAY' && styles.paymentOptionInactive]}
+          onPress={() => setPaymentMethod('RAZORPAY')}
+          testID="payment-method-razorpay"
+        >
+          <View style={[styles.radioOuter, paymentMethod !== 'RAZORPAY' && styles.radioOuterInactive]}>
+            {paymentMethod === 'RAZORPAY' && <View style={styles.radioInner} />}
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.paymentTitle}>Pay Online</Text>
+            <Text style={styles.paymentSubtitle}>Cards, UPI, wallets & netbanking via Razorpay</Text>
+          </View>
+        </Pressable>
 
         <Text style={styles.sectionTitle}>Order Summary</Text>
         <View style={styles.summaryCard}>
@@ -85,7 +121,7 @@ export default function CheckoutScreen({ navigation }: Props) {
             <Text style={styles.summaryValue}>₹{tax}</Text>
           </View>
           <View style={[styles.summaryRow, styles.totalRow]}>
-            <Text style={styles.totalLabel}>To Pay (Cash)</Text>
+            <Text style={styles.totalLabel}>To Pay ({paymentMethod === 'CASH_ON_DELIVERY' ? 'Cash' : 'Online'})</Text>
             <Text style={styles.totalValue}>₹{total}</Text>
           </View>
         </View>
@@ -93,7 +129,9 @@ export default function CheckoutScreen({ navigation }: Props) {
 
       <View style={styles.footer}>
         <Pressable style={styles.primaryButton} onPress={onPlaceOrder} testID="place-order-button">
-          <Text style={styles.primaryButtonText}>Place Order · ₹{total}</Text>
+          <Text style={styles.primaryButtonText}>
+            {paymentMethod === 'CASH_ON_DELIVERY' ? `Place Order · ₹${total}` : `Pay ₹${total}`}
+          </Text>
         </Pressable>
       </View>
     </KeyboardAvoidingView>
@@ -126,6 +164,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 14,
   },
+  paymentOptionInactive: { borderColor: colors.border },
   radioOuter: {
     width: 20,
     height: 20,
@@ -135,6 +174,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  radioOuterInactive: { borderColor: colors.border },
   radioInner: { width: 10, height: 10, borderRadius: 5, backgroundColor: colors.primary },
   paymentTitle: { fontWeight: '700', color: colors.text },
   paymentSubtitle: { color: colors.subtext, fontSize: 12 },

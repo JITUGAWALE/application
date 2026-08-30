@@ -35,7 +35,8 @@ export type Order = {
   restaurantName: string;
   lines: CartLine[];
   address: string;
-  paymentMethod: 'CASH_ON_DELIVERY';
+  paymentMethod: 'CASH_ON_DELIVERY' | 'RAZORPAY';
+  paymentId?: string;
   total: number;
   placedAt: string;
 };

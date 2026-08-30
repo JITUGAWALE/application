@@ -5,5 +5,13 @@ export type RootStackParamList = {
   Menu: { restaurantId: string };
   Cart: undefined;
   Checkout: undefined;
-  OrderConfirmation: { orderId: string };
+  RazorpayPayment: {
+    amount: number;
+    orderId: string;
+    restaurantName: string;
+    customerName: string;
+    customerEmail: string;
+    customerPhone: string;
+  };
+  OrderConfirmation: { orderId: string; paymentId?: string };
 };

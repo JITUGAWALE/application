@@ -8,6 +8,7 @@ import CheckoutScreen from '../screens/CheckoutScreen';
 import LoginScreen from '../screens/LoginScreen';
 import MenuScreen from '../screens/MenuScreen';
 import OrderConfirmationScreen from '../screens/OrderConfirmationScreen';
+import RazorpayPaymentScreen from '../screens/RazorpayPaymentScreen';
 import RestaurantListScreen from '../screens/RestaurantListScreen';
 import SignupScreen from '../screens/SignupScreen';
 import { colors } from '../theme';
@@ -41,6 +42,11 @@ export default function RootNavigator() {
             <Stack.Screen name="Menu" component={MenuScreen} options={{ title: '' }} />
             <Stack.Screen name="Cart" component={CartScreen} options={{ title: 'Your Cart' }} />
             <Stack.Screen name="Checkout" component={CheckoutScreen} options={{ title: 'Checkout' }} />
+            <Stack.Screen
+              name="RazorpayPayment"
+              component={RazorpayPaymentScreen}
+              options={{ title: 'Payment', gestureEnabled: false }}
+            />
             <Stack.Screen
               name="OrderConfirmation"
               component={OrderConfirmationScreen}
