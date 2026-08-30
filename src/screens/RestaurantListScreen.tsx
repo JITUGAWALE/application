@@ -48,7 +48,7 @@ export default function RestaurantListScreen({ navigation }: Props) {
     <View style={styles.container}>
       <View style={styles.header}>
         <View>
-          <Text style={styles.greeting}>Hi, {user?.name.split(' ')[0] ?? 'there'} 👋</Text>
+          <Text style={styles.greeting}>Hi, {user?.name.split(' ')[0] || 'there'} 👋</Text>
           <Text style={styles.headerTitle}>Order food you love</Text>
         </View>
         <Pressable onPress={logout} testID="logout-button">

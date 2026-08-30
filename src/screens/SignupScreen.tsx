@@ -49,7 +49,7 @@ export default function SignupScreen({ navigation }: Props) {
         />
         <TextInput
           style={styles.input}
-          placeholder="Password (min 4 characters)"
+          placeholder="Password (min 6 characters)"
           placeholderTextColor={colors.subtext}
           secureTextEntry
           value={password}
