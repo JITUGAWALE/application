@@ -9,13 +9,13 @@ import { Platform } from 'react-native';
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: 'AIzaSyCfSTl5pGDxM1oDwslB73rLnxQwf5IDtXs',
-  authDomain: 'foodie-c79df.firebaseapp.com',
-  projectId: 'foodie-c79df',
-  storageBucket: 'foodie-c79df.firebasestorage.app',
-  messagingSenderId: '226927163168',
-  appId: '1:226927163168:web:ead0e8cdf21d6ef8bf8945',
-  measurementId: 'G-RMSQGXTDXP',
+  apiKey: 'AIzaSyCoQhKLYj3t7_UoYXWT8-G66-r0puoMnR4',
+  authDomain: 'massage-876ed.firebaseapp.com',
+  projectId: 'massage-876ed',
+  storageBucket: 'massage-876ed.firebasestorage.app',
+  messagingSenderId: '420706813385',
+  appId: '1:420706813385:web:ff4f63e044c639f94f9418',
+  measurementId: 'G-2CYD3N8W4K',
 };
 
 export const firebaseApp = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
