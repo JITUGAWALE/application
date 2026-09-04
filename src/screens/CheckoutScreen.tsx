@@ -15,7 +15,7 @@ export default function CheckoutScreen({ navigation }: Props) {
   const { homeVisitFee, tax, total } = computeOrderTotals(subtotal);
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('CASH_ON_DELIVERY');
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('RAZORPAY');
 
   const onPlaceOrder = () => {
     if (!address.trim() || !phone.trim()) {
