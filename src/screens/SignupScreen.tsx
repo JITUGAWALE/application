@@ -27,7 +27,7 @@ export default function SignupScreen({ navigation }: Props) {
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={styles.form}>
         <Text style={styles.title}>Create account</Text>
-        <Text style={styles.subtitle}>Sign up to start ordering delicious food</Text>
+        <Text style={styles.subtitle}>Sign up to start booking massages at home</Text>
 
         <TextInput
           style={styles.input}

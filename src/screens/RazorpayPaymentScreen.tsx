@@ -10,7 +10,7 @@ import { colors } from '../theme';
 type Props = NativeStackScreenProps<RootStackParamList, 'RazorpayPayment'>;
 
 export default function RazorpayPaymentScreen({ route, navigation }: Props) {
-  const { amount, orderId, restaurantName, customerName, customerEmail, customerPhone } = route.params;
+  const { amount, orderId, centerName, customerName, customerEmail, customerPhone } = route.params;
   const { clearCart } = useCart();
 
   const html = useMemo(
@@ -18,12 +18,12 @@ export default function RazorpayPaymentScreen({ route, navigation }: Props) {
       buildRazorpayCheckoutHtml({
         amountInRupees: amount,
         orderId,
-        restaurantName,
+        centerName,
         customerName,
         customerEmail,
         customerPhone,
       }),
-    [amount, orderId, restaurantName, customerName, customerEmail, customerPhone]
+    [amount, orderId, centerName, customerName, customerEmail, customerPhone]
   );
 
   const onMessage = (event: WebViewMessageEvent) => {

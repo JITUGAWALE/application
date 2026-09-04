@@ -6,10 +6,10 @@ import { useAuth } from '../context/AuthContext';
 import CartScreen from '../screens/CartScreen';
 import CheckoutScreen from '../screens/CheckoutScreen';
 import LoginScreen from '../screens/LoginScreen';
-import MenuScreen from '../screens/MenuScreen';
+import MassageCenterListScreen from '../screens/MassageCenterListScreen';
 import OrderConfirmationScreen from '../screens/OrderConfirmationScreen';
 import RazorpayPaymentScreen from '../screens/RazorpayPaymentScreen';
-import RestaurantListScreen from '../screens/RestaurantListScreen';
+import ServicesScreen from '../screens/ServicesScreen';
 import SignupScreen from '../screens/SignupScreen';
 import { colors } from '../theme';
 import { RootStackParamList } from './types';
@@ -38,8 +38,8 @@ export default function RootNavigator() {
       >
         {user ? (
           <>
-            <Stack.Screen name="Restaurants" component={RestaurantListScreen} options={{ headerShown: false }} />
-            <Stack.Screen name="Menu" component={MenuScreen} options={{ title: '' }} />
+            <Stack.Screen name="Centers" component={MassageCenterListScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Services" component={ServicesScreen} options={{ title: '' }} />
             <Stack.Screen name="Cart" component={CartScreen} options={{ title: 'Your Cart' }} />
             <Stack.Screen name="Checkout" component={CheckoutScreen} options={{ title: 'Checkout' }} />
             <Stack.Screen

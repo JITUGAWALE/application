@@ -8,16 +8,16 @@ import { colors } from '../theme';
 type Props = NativeStackScreenProps<RootStackParamList, 'Cart'>;
 
 export default function CartScreen({ navigation }: Props) {
-  const { restaurant, lines, subtotal, addItem, decrementItem } = useCart();
-  const { deliveryFee, tax, total } = computeOrderTotals(subtotal);
+  const { center, lines, subtotal, addItem, decrementItem } = useCart();
+  const { homeVisitFee, tax, total } = computeOrderTotals(subtotal);
 
   if (lines.length === 0) {
     return (
       <View style={styles.emptyContainer}>
-        <Text style={styles.emptyEmoji}>🛒</Text>
+        <Text style={styles.emptyEmoji}>🧖</Text>
         <Text style={styles.emptyTitle}>Your cart is empty</Text>
-        <Pressable style={styles.primaryButton} onPress={() => navigation.navigate('Restaurants')}>
-          <Text style={styles.primaryButtonText}>Browse Restaurants</Text>
+        <Pressable style={styles.primaryButton} onPress={() => navigation.navigate('Centers')}>
+          <Text style={styles.primaryButtonText}>Browse Massage Centers</Text>
         </Pressable>
       </View>
     );
@@ -25,7 +25,7 @@ export default function CartScreen({ navigation }: Props) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.restaurantName}>{restaurant?.name}</Text>
+      <Text style={styles.centerName}>{center?.name}</Text>
 
       <FlatList
         data={lines}
@@ -35,7 +35,7 @@ export default function CartScreen({ navigation }: Props) {
           <View style={styles.row}>
             <View style={styles.rowInfo}>
               <Text style={styles.rowName}>{line.item.name}</Text>
-              <Text style={styles.rowPrice}>₹{line.item.price} each</Text>
+              <Text style={styles.rowPrice}>₹{line.item.price} each · {line.item.durationMinutes} min</Text>
             </View>
             <View style={styles.stepper}>
               <Pressable
@@ -47,7 +47,7 @@ export default function CartScreen({ navigation }: Props) {
               </Pressable>
               <Text style={styles.stepperCount}>{line.quantity}</Text>
               <Pressable
-                onPress={() => restaurant && addItem(restaurant, line.item)}
+                onPress={() => center && addItem(center, line.item)}
                 style={styles.stepperButton}
                 testID={`cart-increment-${line.item.id}`}
               >
@@ -65,8 +65,8 @@ export default function CartScreen({ navigation }: Props) {
           <Text style={styles.summaryValue}>₹{subtotal}</Text>
         </View>
         <View style={styles.summaryRow}>
-          <Text style={styles.summaryLabel}>Delivery Fee</Text>
-          <Text style={styles.summaryValue}>₹{deliveryFee}</Text>
+          <Text style={styles.summaryLabel}>Home Visit Fee</Text>
+          <Text style={styles.summaryValue}>₹{homeVisitFee}</Text>
         </View>
         <View style={styles.summaryRow}>
           <Text style={styles.summaryLabel}>Taxes</Text>
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   emptyContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, padding: 24 },
   emptyEmoji: { fontSize: 48 },
   emptyTitle: { fontSize: 18, fontWeight: '700', color: colors.text },
-  restaurantName: { fontSize: 20, fontWeight: '800', color: colors.text, padding: 20, paddingBottom: 8 },
+  centerName: { fontSize: 20, fontWeight: '800', color: colors.text, padding: 20, paddingBottom: 8 },
   listContent: { paddingHorizontal: 20, gap: 12 },
   row: {
     flexDirection: 'row',

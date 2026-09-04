@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - claude/zomato-food-delivery-app-9lzexx
+      - claude/massage-customer-app-ygpaxw
   workflow_dispatch:
 
 permissions:
@@ -52,11 +53,11 @@ jobs:
       - name: Copy APK to dist
         run: |
           mkdir -p dist
-          cp android/app/build/outputs/apk/release/app-release.apk dist/foodie-release.apk
+          cp android/app/build/outputs/apk/release/app-release.apk dist/soothe-release.apk
           ls -la dist/
 
       - name: Upload APK as workflow artifact
         uses: actions/upload-artifact@v4
         with:
-          name: foodie-release-apk
-          path: dist/foodie-release.apk
+          name: soothe-release-apk
+          path: dist/soothe-release.apk

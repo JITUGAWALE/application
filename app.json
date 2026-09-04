@@ -1,20 +1,20 @@
 {
   "expo": {
-    "name": "Foodie",
-    "slug": "foodie-delivery-app",
+    "name": "Soothe",
+    "slug": "soothe-massage-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.jitugawale.foodie"
+      "bundleIdentifier": "com.jitugawale.soothe"
     },
     "android": {
-      "package": "com.jitugawale.foodie",
+      "package": "com.jitugawale.soothe",
       "versionCode": 1,
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#F6F5F1",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"

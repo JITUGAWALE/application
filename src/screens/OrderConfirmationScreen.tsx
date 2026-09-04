@@ -12,21 +12,21 @@ export default function OrderConfirmationScreen({ route, navigation }: Props) {
   return (
     <View style={styles.container}>
       <Text style={styles.emoji}>✅</Text>
-      <Text style={styles.title}>Order Placed!</Text>
-      <Text style={styles.orderId}>Order #{orderId}</Text>
+      <Text style={styles.title}>Booking Confirmed!</Text>
+      <Text style={styles.orderId}>Booking #{orderId}</Text>
       {paymentId && <Text style={styles.orderId}>Payment ID: {paymentId}</Text>}
       <Text style={styles.message}>
         {paymentId
-          ? 'Payment received. Your order has been placed successfully.'
-          : 'Your order has been placed successfully. Pay with cash when it arrives at your doorstep.'}
+          ? 'Payment received. Your therapist will arrive at your scheduled time.'
+          : 'Your booking is confirmed. Pay the therapist in cash when they arrive.'}
       </Text>
 
       <Pressable
         style={styles.primaryButton}
-        onPress={() => navigation.reset({ index: 0, routes: [{ name: 'Restaurants' }] })}
-        testID="back-to-restaurants"
+        onPress={() => navigation.reset({ index: 0, routes: [{ name: 'Centers' }] })}
+        testID="back-to-centers"
       >
-        <Text style={styles.primaryButtonText}>Back to Restaurants</Text>
+        <Text style={styles.primaryButtonText}>Back to Massage Centers</Text>
       </Pressable>
     </View>
   );

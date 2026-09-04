@@ -24,8 +24,8 @@ export default function LoginScreen({ navigation }: Props) {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <Text style={styles.logo}>foodie</Text>
-      <Text style={styles.tagline}>Order food from your favorite restaurants</Text>
+      <Text style={styles.logo}>soothe</Text>
+      <Text style={styles.tagline}>Book relaxing massages at home</Text>
 
       <View style={styles.form}>
         <Text style={styles.title}>Log in</Text>

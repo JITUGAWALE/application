@@ -3,42 +3,42 @@ import React, { useMemo, useState } from 'react';
 import { FlatList, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
-import { RESTAURANTS } from '../data/restaurants';
+import { MASSAGE_CENTERS } from '../data/massageCenters';
 import { RootStackParamList } from '../navigation/types';
 import { colors } from '../theme';
-import { Restaurant } from '../types';
+import { MassageCenter } from '../types';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Restaurants'>;
+type Props = NativeStackScreenProps<RootStackParamList, 'Centers'>;
 
-export default function RestaurantListScreen({ navigation }: Props) {
+export default function MassageCenterListScreen({ navigation }: Props) {
   const { user, logout } = useAuth();
   const { itemCount } = useCart();
   const [query, setQuery] = useState('');
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return RESTAURANTS;
-    return RESTAURANTS.filter(
-      (r) => r.name.toLowerCase().includes(q) || r.cuisines.some((c) => c.toLowerCase().includes(q))
+    if (!q) return MASSAGE_CENTERS;
+    return MASSAGE_CENTERS.filter(
+      (c) => c.name.toLowerCase().includes(q) || c.specialties.some((s) => s.toLowerCase().includes(q))
     );
   }, [query]);
 
-  const renderItem = ({ item }: { item: Restaurant }) => (
+  const renderItem = ({ item }: { item: MassageCenter }) => (
     <Pressable
       style={styles.card}
-      onPress={() => navigation.navigate('Menu', { restaurantId: item.id })}
-      testID={`restaurant-${item.id}`}
+      onPress={() => navigation.navigate('Services', { centerId: item.id })}
+      testID={`center-${item.id}`}
     >
       <Image source={{ uri: item.image }} style={styles.cardImage} />
       <View style={styles.cardBody}>
         <Text style={styles.cardTitle}>{item.name}</Text>
-        <Text style={styles.cardSubtitle}>{item.cuisines.join(', ')}</Text>
+        <Text style={styles.cardSubtitle}>{item.specialties.join(', ')}</Text>
         <View style={styles.cardMetaRow}>
           <View style={styles.ratingPill}>
             <Text style={styles.ratingText}>★ {item.rating}</Text>
           </View>
-          <Text style={styles.metaText}>{item.deliveryTimeMinutes} min</Text>
-          <Text style={styles.metaText}>₹{item.priceForTwo} for two</Text>
+          <Text style={styles.metaText}>Therapist in {item.arrivalMinutes} min</Text>
+          <Text style={styles.metaText}>From ₹{item.startingPrice}</Text>
         </View>
       </View>
     </Pressable>
@@ -49,7 +49,7 @@ export default function RestaurantListScreen({ navigation }: Props) {
       <View style={styles.header}>
         <View>
           <Text style={styles.greeting}>Hi, {user?.name.split(' ')[0] || 'there'} 👋</Text>
-          <Text style={styles.headerTitle}>Order food you love</Text>
+          <Text style={styles.headerTitle}>Book a massage at home</Text>
         </View>
         <Pressable onPress={logout} testID="logout-button">
           <Text style={styles.logoutText}>Log out</Text>
@@ -58,11 +58,11 @@ export default function RestaurantListScreen({ navigation }: Props) {
 
       <TextInput
         style={styles.search}
-        placeholder="Search restaurants or cuisines"
+        placeholder="Search centers or specialties"
         placeholderTextColor={colors.subtext}
         value={query}
         onChangeText={setQuery}
-        testID="restaurant-search"
+        testID="center-search"
       />
 
       <FlatList

@@ -11,20 +11,20 @@ type PaymentMethod = 'CASH_ON_DELIVERY' | 'RAZORPAY';
 
 export default function CheckoutScreen({ navigation }: Props) {
   const { user } = useAuth();
-  const { restaurant, lines, subtotal, clearCart } = useCart();
-  const { deliveryFee, tax, total } = computeOrderTotals(subtotal);
+  const { center, lines, subtotal, clearCart } = useCart();
+  const { homeVisitFee, tax, total } = computeOrderTotals(subtotal);
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('CASH_ON_DELIVERY');
 
   const onPlaceOrder = () => {
     if (!address.trim() || !phone.trim()) {
-      Alert.alert('Missing details', 'Please add a delivery address and phone number.');
+      Alert.alert('Missing details', 'Please add the address for the home visit and a phone number.');
       return;
     }
     if (!user) return;
 
-    const orderId = `ORD${Date.now().toString().slice(-8)}`;
+    const orderId = `BKG${Date.now().toString().slice(-8)}`;
 
     if (paymentMethod === 'CASH_ON_DELIVERY') {
       clearCart();
@@ -35,7 +35,7 @@ export default function CheckoutScreen({ navigation }: Props) {
     navigation.navigate('RazorpayPayment', {
       amount: total,
       orderId,
-      restaurantName: restaurant?.name ?? 'Foodie',
+      centerName: center?.name ?? 'Soothe',
       customerName: user.name,
       customerEmail: user.email,
       customerPhone: phone,
@@ -45,7 +45,7 @@ export default function CheckoutScreen({ navigation }: Props) {
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Text style={styles.sectionTitle}>Delivery Address</Text>
+        <Text style={styles.sectionTitle}>Home Visit Address</Text>
         <TextInput
           style={[styles.input, styles.multiline]}
           placeholder="House no, street, area, city"
@@ -64,7 +64,7 @@ export default function CheckoutScreen({ navigation }: Props) {
           onChangeText={setPhone}
           testID="checkout-phone"
         />
-        {user && <Text style={styles.hint}>Ordering as {user.name} ({user.email})</Text>}
+        {user && <Text style={styles.hint}>Booking as {user.name} ({user.email})</Text>}
 
         <Text style={styles.sectionTitle}>Payment Method</Text>
 
@@ -78,7 +78,7 @@ export default function CheckoutScreen({ navigation }: Props) {
           </View>
           <View style={{ flex: 1 }}>
             <Text style={styles.paymentTitle}>Cash on Delivery</Text>
-            <Text style={styles.paymentSubtitle}>Pay with cash when your order arrives</Text>
+            <Text style={styles.paymentSubtitle}>Pay the therapist in cash after your session</Text>
           </View>
         </Pressable>
 
@@ -96,9 +96,9 @@ export default function CheckoutScreen({ navigation }: Props) {
           </View>
         </Pressable>
 
-        <Text style={styles.sectionTitle}>Order Summary</Text>
+        <Text style={styles.sectionTitle}>Booking Summary</Text>
         <View style={styles.summaryCard}>
-          <Text style={styles.restaurantName}>{restaurant?.name}</Text>
+          <Text style={styles.centerName}>{center?.name}</Text>
           {lines.map((line) => (
             <View style={styles.summaryRow} key={line.item.id}>
               <Text style={styles.summaryLabel}>
@@ -113,8 +113,8 @@ export default function CheckoutScreen({ navigation }: Props) {
             <Text style={styles.summaryValue}>₹{subtotal}</Text>
           </View>
           <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Delivery Fee</Text>
-            <Text style={styles.summaryValue}>₹{deliveryFee}</Text>
+            <Text style={styles.summaryLabel}>Home Visit Fee</Text>
+            <Text style={styles.summaryValue}>₹{homeVisitFee}</Text>
           </View>
           <View style={styles.summaryRow}>
             <Text style={styles.summaryLabel}>Taxes</Text>
@@ -130,7 +130,7 @@ export default function CheckoutScreen({ navigation }: Props) {
       <View style={styles.footer}>
         <Pressable style={styles.primaryButton} onPress={onPlaceOrder} testID="place-order-button">
           <Text style={styles.primaryButtonText}>
-            {paymentMethod === 'CASH_ON_DELIVERY' ? `Place Order · ₹${total}` : `Pay ₹${total}`}
+            {paymentMethod === 'CASH_ON_DELIVERY' ? `Book Now · ₹${total}` : `Pay ₹${total}`}
           </Text>
         </Pressable>
       </View>
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
     padding: 14,
     gap: 6,
   },
-  restaurantName: { fontWeight: '800', color: colors.text, marginBottom: 4 },
+  centerName: { fontWeight: '800', color: colors.text, marginBottom: 4 },
   summaryRow: { flexDirection: 'row', justifyContent: 'space-between' },
   summaryLabel: { color: colors.subtext, flexShrink: 1, paddingRight: 8 },
   summaryValue: { color: colors.text },

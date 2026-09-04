@@ -1,14 +1,14 @@
 export type RootStackParamList = {
   Login: undefined;
   Signup: undefined;
-  Restaurants: undefined;
-  Menu: { restaurantId: string };
+  Centers: undefined;
+  Services: { centerId: string };
   Cart: undefined;
   Checkout: undefined;
   RazorpayPayment: {
     amount: number;
     orderId: string;
-    restaurantName: string;
+    centerName: string;
     customerName: string;
     customerEmail: string;
     customerPhone: string;

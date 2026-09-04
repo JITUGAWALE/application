@@ -1,27 +1,27 @@
-export type MenuItem = {
+export type Service = {
   id: string;
   name: string;
   description: string;
   price: number;
+  durationMinutes: number;
   category: string;
-  isVeg: boolean;
   image: string;
 };
 
-export type Restaurant = {
+export type MassageCenter = {
   id: string;
   name: string;
-  cuisines: string[];
+  specialties: string[];
   rating: number;
-  deliveryTimeMinutes: number;
-  priceForTwo: number;
+  arrivalMinutes: number;
+  startingPrice: number;
   image: string;
-  menu: MenuItem[];
+  services: Service[];
 };
 
 export type CartLine = {
-  restaurantId: string;
-  item: MenuItem;
+  centerId: string;
+  item: Service;
   quantity: number;
 };
 
@@ -32,7 +32,7 @@ export type User = {
 
 export type Order = {
   id: string;
-  restaurantName: string;
+  centerName: string;
   lines: CartLine[];
   address: string;
   paymentMethod: 'CASH_ON_DELIVERY' | 'RAZORPAY';

@@ -3,28 +3,28 @@ export const RAZORPAY_KEY_ID = 'rzp_test_TQUqk4akFmuac2';
 export type RazorpayCheckoutOptions = {
   amountInRupees: number;
   orderId: string;
-  restaurantName: string;
+  centerName: string;
   customerName: string;
   customerEmail: string;
   customerPhone: string;
 };
 
 export function buildRazorpayCheckoutHtml(options: RazorpayCheckoutOptions): string {
-  const { amountInRupees, orderId, restaurantName, customerName, customerEmail, customerPhone } = options;
+  const { amountInRupees, orderId, centerName, customerName, customerEmail, customerPhone } = options;
 
   const checkoutOptions = {
     key: RAZORPAY_KEY_ID,
     amount: Math.round(amountInRupees * 100),
     currency: 'INR',
-    name: 'Foodie',
-    description: `Order from ${restaurantName}`,
+    name: 'Soothe',
+    description: `Massage booking with ${centerName}`,
     prefill: {
       name: customerName,
       email: customerEmail,
       contact: customerPhone,
     },
     notes: { orderId },
-    theme: { color: '#E23744' },
+    theme: { color: '#1F7A6C' },
   };
 
   return `<!DOCTYPE html>
@@ -33,7 +33,7 @@ export function buildRazorpayCheckoutHtml(options: RazorpayCheckoutOptions): str
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
-      html, body { margin: 0; padding: 0; height: 100%; background: #F7F7F7; font-family: -apple-system, Roboto, sans-serif; }
+      html, body { margin: 0; padding: 0; height: 100%; background: #F6F5F1; font-family: -apple-system, Roboto, sans-serif; }
     </style>
   </head>
   <body>

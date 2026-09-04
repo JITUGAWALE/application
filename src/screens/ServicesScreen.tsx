@@ -2,51 +2,51 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useMemo } from 'react';
 import { Alert, Image, Pressable, SectionList, StyleSheet, Text, View } from 'react-native';
 import { useCart } from '../context/CartContext';
-import { RESTAURANTS } from '../data/restaurants';
+import { MASSAGE_CENTERS } from '../data/massageCenters';
 import { RootStackParamList } from '../navigation/types';
 import { colors } from '../theme';
-import { MenuItem, Restaurant } from '../types';
+import { MassageCenter, Service } from '../types';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Menu'>;
+type Props = NativeStackScreenProps<RootStackParamList, 'Services'>;
 
-export default function MenuScreen({ route, navigation }: Props) {
-  const { restaurantId } = route.params;
-  const restaurant = useMemo(() => RESTAURANTS.find((r) => r.id === restaurantId), [restaurantId]) as Restaurant;
-  const { restaurant: cartRestaurant, quantityOf, addItem, decrementItem, itemCount, subtotal } = useCart();
+export default function ServicesScreen({ route, navigation }: Props) {
+  const { centerId } = route.params;
+  const center = useMemo(() => MASSAGE_CENTERS.find((c) => c.id === centerId), [centerId]) as MassageCenter;
+  const { center: cartCenter, quantityOf, addItem, decrementItem, itemCount, subtotal } = useCart();
 
   const sections = useMemo(() => {
-    const byCategory = new Map<string, MenuItem[]>();
-    restaurant.menu.forEach((item) => {
+    const byCategory = new Map<string, Service[]>();
+    center.services.forEach((item) => {
       const list = byCategory.get(item.category) ?? [];
       list.push(item);
       byCategory.set(item.category, list);
     });
     return Array.from(byCategory.entries()).map(([title, data]) => ({ title, data }));
-  }, [restaurant]);
+  }, [center]);
 
-  const onAdd = (item: MenuItem) => {
-    if (cartRestaurant && cartRestaurant.id !== restaurant.id) {
+  const onAdd = (item: Service) => {
+    if (cartCenter && cartCenter.id !== center.id) {
       Alert.alert(
         'Start a new cart?',
-        `Your cart has items from ${cartRestaurant.name}. Adding from ${restaurant.name} will clear it.`,
+        `Your cart has services from ${cartCenter.name}. Adding from ${center.name} will clear it.`,
         [
           { text: 'Cancel', style: 'cancel' },
-          { text: 'Start New Cart', onPress: () => addItem(restaurant, item) },
+          { text: 'Start New Cart', onPress: () => addItem(center, item) },
         ]
       );
       return;
     }
-    addItem(restaurant, item);
+    addItem(center, item);
   };
 
   return (
     <View style={styles.container}>
-      <Image source={{ uri: restaurant.image }} style={styles.hero} />
+      <Image source={{ uri: center.image }} style={styles.hero} />
       <View style={styles.heroOverlay}>
-        <Text style={styles.title}>{restaurant.name}</Text>
-        <Text style={styles.subtitle}>{restaurant.cuisines.join(', ')}</Text>
+        <Text style={styles.title}>{center.name}</Text>
+        <Text style={styles.subtitle}>{center.specialties.join(', ')}</Text>
         <Text style={styles.subtitle}>
-          ★ {restaurant.rating} · {restaurant.deliveryTimeMinutes} min · ₹{restaurant.priceForTwo} for two
+          ★ {center.rating} · Therapist in {center.arrivalMinutes} min · From ₹{center.startingPrice}
         </Text>
       </View>
 
@@ -60,13 +60,10 @@ export default function MenuScreen({ route, navigation }: Props) {
           return (
             <View style={styles.itemRow}>
               <View style={styles.itemInfo}>
-                <View style={styles.itemTitleRow}>
-                  <View style={[styles.vegDot, { borderColor: item.isVeg ? colors.veg : colors.nonVeg }]}>
-                    <View style={[styles.vegDotInner, { backgroundColor: item.isVeg ? colors.veg : colors.nonVeg }]} />
-                  </View>
-                  <Text style={styles.itemName}>{item.name}</Text>
-                </View>
-                <Text style={styles.itemPrice}>₹{item.price}</Text>
+                <Text style={styles.itemName}>{item.name}</Text>
+                <Text style={styles.itemMeta}>
+                  ₹{item.price} · {item.durationMinutes} min
+                </Text>
                 <Text style={styles.itemDescription} numberOfLines={2}>
                   {item.description}
                 </Text>
@@ -95,7 +92,7 @@ export default function MenuScreen({ route, navigation }: Props) {
       />
 
       {itemCount > 0 && (
-        <Pressable style={styles.cartBar} onPress={() => navigation.navigate('Cart')} testID="menu-view-cart-bar">
+        <Pressable style={styles.cartBar} onPress={() => navigation.navigate('Cart')} testID="services-view-cart-bar">
           <Text style={styles.cartBarText}>
             {itemCount} item{itemCount > 1 ? 's' : ''} · ₹{subtotal}
           </Text>
@@ -125,11 +122,8 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   itemInfo: { flex: 1, gap: 4 },
-  itemTitleRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  vegDot: { width: 14, height: 14, borderWidth: 1.5, borderRadius: 2, alignItems: 'center', justifyContent: 'center' },
-  vegDotInner: { width: 6, height: 6, borderRadius: 3 },
-  itemName: { fontWeight: '700', color: colors.text, fontSize: 15, flexShrink: 1 },
-  itemPrice: { color: colors.text, fontWeight: '600' },
+  itemName: { fontWeight: '700', color: colors.text, fontSize: 15 },
+  itemMeta: { color: colors.text, fontWeight: '600', fontSize: 13 },
   itemDescription: { color: colors.subtext, fontSize: 13 },
   itemImage: { width: 80, height: 80, borderRadius: 10 },
   addControlWrap: { justifyContent: 'flex-end', alignItems: 'center', width: 80 },
